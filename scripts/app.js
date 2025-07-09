@@ -2,6 +2,7 @@ function init(){
     //All our code goes here
     const gridElem = document.querySelector('.grid')
     const scoreElem = document.querySelector('#score-display')
+    const audioElem = document.querySelector('#quack')
 
     const cells = []
 
@@ -13,18 +14,33 @@ function init(){
 
     let score = 0
 
+    let totalDuck = 0
+
+
+    function endGame(){
+        alert('Game ended, score: 0')
+        score = 0
+        totalDuck = 0
+    }
 
     function play(){
         setInterval(() => {
+            if (totalDuck < 10){
             removeDuck()
             //Ramdomizer
             duckPositon = Math.floor(Math.random()* numberCells)
             addDuck()
-        }, 2000);
+            }else {
+                endGame()
+            }
+
+        },3000);
     }
     function addDuck(){
         cells[duckPositon].classList.add('duck')
+        totalDuck++
     }
+
 
     function removeDuck() {
         cells[duckPositon].classList.remove('duck')
@@ -32,8 +48,12 @@ function init(){
     function handleClick(event){
         console.log("runs")
         if (event.target.classList.contains('duck')){
+            audioElem.pause()
+            audioElem.currentTime = 0
             score += 10
+            //to update stuff
             scoreElem.textContent = `Your score is ${score}`
+            audioElem.play()
             console.log(score)
         }
     }
